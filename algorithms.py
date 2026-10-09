@@ -21,15 +21,26 @@ def validate_number_list(input_string):
     """
     if not input_string or not input_string.strip():
         raise ValueError("Input cannot be empty. Please provide a valid list of numbers.")
+
+    # SECURITY: Prevent memory exhaustion DoS from massive string inputs
+    if len(input_string) > 500000:
+        raise ValueError("Input exceeds maximum allowed length.")
+
     try:
         # Handles comma separated or space separated
         cleaned = input_string.replace(',', ' ').split()
         if not cleaned:
             raise ValueError("No valid numbers found in the input.")
+
+        # SECURITY: Prevent CPU exhaustion DoS (Algorithmic Complexity)
+        # build_bst has O(N^2) worst-case time complexity for sorted arrays
+        if len(cleaned) > 20000:
+            raise ValueError("Maximum array size exceeded. Please provide up to 20,000 numbers.")
+
         return [int(x) for x in cleaned]
     except ValueError as e:
         # Re-raise the custom message if it's already generated, otherwise generic message
-        if "No valid numbers" in str(e):
+        if "No valid numbers" in str(e) or "exceeds" in str(e) or "Maximum array size" in str(e):
             raise
         raise ValueError("Invalid format: Please provide only integer values separated by commas or spaces.")
 
