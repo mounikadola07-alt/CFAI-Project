@@ -1,0 +1,4 @@
+## 2023-10-10 - Algorithmic DoS in API Parameter Handling
+**Vulnerability:** The application was vulnerable to an Algorithmic Denial of Service (DoS) attack. A naive BST building function (`build_bst`), which takes $O(N^2)$ time when given already-sorted input, was exposed via the `/api/search` endpoint without input size limitations.
+**Learning:** Even if an algorithm is intended only for backend measurement, exposing unbounded, nonlinear-time operations (like $O(N^2)$ on sorted data) over a public API allows attackers to consume excessive CPU and memory simply by sending large valid inputs.
+**Prevention:** Always implement strict maximum input length and size limits (e.g., maximum string length and maximum array elements) on data received from users before processing it, especially when using recursive or nonlinear time complexity algorithms.
