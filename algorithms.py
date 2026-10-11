@@ -19,6 +19,14 @@ def validate_number_list(input_string):
     Parses a string into a list of integers.
     Raises ValueError if invalid or empty.
     """
+    # 🛡️ Sentinel: Validate input type to prevent type errors (500 Internal Error)
+    if not isinstance(input_string, str):
+        raise ValueError("Input must be a valid text string.")
+
+    # 🛡️ Sentinel: Limit payload length to prevent DoS
+    if len(input_string) > 150000:
+        raise ValueError("Input payload too large. Maximum length exceeded.")
+
     if not input_string or not input_string.strip():
         raise ValueError("Input cannot be empty. Please provide a valid list of numbers.")
     try:
@@ -26,10 +34,15 @@ def validate_number_list(input_string):
         cleaned = input_string.replace(',', ' ').split()
         if not cleaned:
             raise ValueError("No valid numbers found in the input.")
+
+        # 🛡️ Sentinel: Limit array size to prevent Algorithmic DoS (e.g. O(N^2) BST building)
+        if len(cleaned) > 15000:
+            raise ValueError("Dataset too large. Maximum allowed is 15,000 numbers.")
+
         return [int(x) for x in cleaned]
     except ValueError as e:
         # Re-raise the custom message if it's already generated, otherwise generic message
-        if "No valid numbers" in str(e):
+        if "No valid numbers" in str(e) or "Dataset too large" in str(e):
             raise
         raise ValueError("Invalid format: Please provide only integer values separated by commas or spaces.")
 
