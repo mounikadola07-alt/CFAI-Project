@@ -10,7 +10,10 @@ def index():
 @app.route('/api/search', methods=['POST'])
 def compare_search():
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'status': 'error', 'message': "Invalid JSON payload"}), 400
+
         target = int(data.get('target', 0))
         arr = validate_number_list(data.get('array', ''))
         
@@ -57,13 +60,17 @@ def compare_search():
         })
     except ValueError as ve:
         return jsonify({'status': 'error', 'message': f"Validation Error: {str(ve)}"}), 400
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': f"Internal Error: {str(e)}"}), 500
+    except Exception:
+        # Prevent information leakage
+        return jsonify({'status': 'error', 'message': "An unexpected internal error occurred."}), 500
 
 @app.route('/api/subset', methods=['POST'])
 def compare_subset():
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'status': 'error', 'message': "Invalid JSON payload"}), 400
+
         collection_a = validate_number_list(data.get('collection_a', ''))
         collection_b = validate_number_list(data.get('collection_b', ''))
         
@@ -86,8 +93,11 @@ def compare_subset():
                 }
             }
         })
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 400
+    except ValueError as ve:
+        return jsonify({'status': 'error', 'message': f"Validation Error: {str(ve)}"}), 400
+    except Exception:
+        # Prevent information leakage
+        return jsonify({'status': 'error', 'message': "An unexpected internal error occurred."}), 500
 
 
 if __name__ == '__main__':
