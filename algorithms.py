@@ -17,8 +17,12 @@ def time_it(func):
 def validate_number_list(input_string):
     """
     Parses a string into a list of integers.
-    Raises ValueError if invalid or empty.
+    Raises ValueError if invalid, empty, or too large.
     """
+    if not isinstance(input_string, str):
+        raise ValueError("Input must be a string.")
+    if len(input_string) > 100000:
+        raise ValueError("Input string is too large.")
     if not input_string or not input_string.strip():
         raise ValueError("Input cannot be empty. Please provide a valid list of numbers.")
     try:
