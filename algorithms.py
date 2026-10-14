@@ -79,24 +79,28 @@ class TreeNode:
         self.right = None
 
 def build_bst(arr):
+    """
+    Builds a balanced BST from an array in O(N log N) time.
+    Prevents Algorithmic Complexity DoS from O(N^2) unbalanced insertions
+    while maintaining the BST property even for unsorted inputs.
+    """
     if not arr:
         return None
-    root = TreeNode(arr[0], 0)
-    for i in range(1, len(arr)):
-        val = arr[i]
-        curr = root
-        while True:
-            if val < curr.val:
-                if curr.left is None:
-                    curr.left = TreeNode(val, i)
-                    break
-                curr = curr.left
-            else:
-                if curr.right is None:
-                    curr.right = TreeNode(val, i)
-                    break
-                curr = curr.right
-    return root
+
+    # Pair elements with their original indices and sort them
+    sorted_items = sorted([(val, i) for i, val in enumerate(arr)], key=lambda x: x[0])
+
+    def helper(left, right):
+        if left > right:
+            return None
+        mid = (left + right) // 2
+        val, original_index = sorted_items[mid]
+        node = TreeNode(val, original_index)
+        node.left = helper(left, mid - 1)
+        node.right = helper(mid + 1, right)
+        return node
+
+    return helper(0, len(arr) - 1)
 
 @time_it
 def bst_search(root: TreeNode, target: int) -> int:
