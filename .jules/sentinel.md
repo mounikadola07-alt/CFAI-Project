@@ -1,0 +1,4 @@
+## 2024-03-01 - DoS via Unrestricted List Length
+**Vulnerability:** The application was vulnerable to Denial of Service (DoS) because the `validate_number_list` function did not enforce any limit on the number of items it would parse.
+**Learning:** This is particularly dangerous for this application because the `/api/search` endpoint passes the parsed list to `build_bst`. Building a Binary Search Tree from a pre-sorted array has an O(N^2) time complexity. An attacker could submit an extremely large pre-sorted array, causing the server to hang or crash due to excessive CPU usage and recursion depth issues.
+**Prevention:** Always enforce a reasonable maximum length on user-supplied lists or arrays, especially before feeding them into algorithms with worse than O(N) time complexity. We implemented a `max_length` parameter defaulting to 15,000 items in `validate_number_list`.

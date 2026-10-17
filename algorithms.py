@@ -14,10 +14,11 @@ def time_it(func):
     return wrapper
 
 # --- Error Handling Utilities ---
-def validate_number_list(input_string):
+def validate_number_list(input_string, max_length=15000):
     """
     Parses a string into a list of integers.
     Raises ValueError if invalid or empty.
+    Also raises ValueError if the list exceeds max_length to prevent DoS.
     """
     if not input_string or not input_string.strip():
         raise ValueError("Input cannot be empty. Please provide a valid list of numbers.")
@@ -26,10 +27,16 @@ def validate_number_list(input_string):
         cleaned = input_string.replace(',', ' ').split()
         if not cleaned:
             raise ValueError("No valid numbers found in the input.")
-        return [int(x) for x in cleaned]
+
+        if len(cleaned) > max_length:
+            raise ValueError(f"Input list too long: maximum allowed length is {max_length} items.")
+
+        parsed_list = [int(x) for x in cleaned]
+
+        return parsed_list
     except ValueError as e:
         # Re-raise the custom message if it's already generated, otherwise generic message
-        if "No valid numbers" in str(e):
+        if "No valid numbers" in str(e) or "Input list too long" in str(e):
             raise
         raise ValueError("Invalid format: Please provide only integer values separated by commas or spaces.")
 
