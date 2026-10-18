@@ -1,0 +1,4 @@
+## 2026-10-18 - [Fix Denial of Service in BST construction]
+**Vulnerability:** The `/api/search` endpoint processes a comma-separated list of numbers and builds a Binary Search Tree (BST) from the parsed elements, resulting in a time complexity of O(N^2) for sorted arrays. This allowed attackers to perform a Denial of Service (DoS) attack by submitting a large list of numbers, tying up server resources.
+**Learning:** The complexity scaling of the BST construction mechanism (`build_bst`) when provided with large lists without size constraints can cause extreme latency, tying up CPU.
+**Prevention:** Implement a strict length limit on untrusted user input arrays before performing computationally heavy operations like building the BST. The `validate_number_list` function now enforces a `max_length` parameter, limiting input lists to 15000 elements.
