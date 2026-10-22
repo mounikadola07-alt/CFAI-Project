@@ -1,0 +1,4 @@
+## 2024-10-22 - DoS Vulnerability via O(N^2) BST Construction
+**Vulnerability:** The `/api/search` endpoint allowed users to submit arbitrarily large lists which were processed using `build_bst`. Building a BST with sequential inputs (or when unbalanced) can result in an O(N^2) operation, leading to a Denial of Service (DoS) due to CPU exhaustion when large datasets are supplied.
+**Learning:** This occurred because there was no length limit on user input, meaning an attacker could easily provide a huge list that monopolized backend resources during BST construction, which wasn't bounded.
+**Prevention:** Always implement input validation limits (e.g., `max_length=15000`) for data fields to prevent algorithmic complexity attacks or resource exhaustion in computationally intensive backend operations.
