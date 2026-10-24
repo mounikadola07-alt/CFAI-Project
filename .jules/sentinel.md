@@ -1,0 +1,4 @@
+## 2024-05-16 - DoS Vulnerability in Search API
+**Vulnerability:** A Denial of Service (DoS) vulnerability existed due to the lack of input size limits. When calling the `/api/search` endpoint, building a Binary Search Tree (BST) from a sorted array takes O(N^2) time.
+**Learning:** An attacker could submit an extremely large, pre-sorted array, which would cause the server to hang and consume excessive CPU while building the BST, leading to a DoS condition.
+**Prevention:** Implement input validation limits, such as a `max_length` parameter when processing user-provided arrays, to prevent unbounded resource consumption.
