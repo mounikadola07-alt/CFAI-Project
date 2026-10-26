@@ -1,0 +1,4 @@
+## 2023-10-26 - DoS Vulnerability in Unbalanced BST Construction
+**Vulnerability:** Denial of Service (DoS) vulnerability due to unbounded array input length leading to worst-case O(N^2) performance when building a Binary Search Tree (BST) from pre-sorted arrays.
+**Learning:** The `/api/search` endpoint accepts user input arrays and calls `arr.sort()` before calling `build_bst(arr)`. For an unbalanced BST creation, inserting elements in sorted order causes it to degrade into a linked list, making insertion time O(N) per element and overall construction time O(N^2). Without an input length limit, attackers can send extremely large arrays, exhausting server CPU resources.
+**Prevention:** Implement and enforce a hard limit on input array sizes (e.g., 15,000 elements) in input validation functions (`validate_number_list`).
