@@ -1,0 +1,4 @@
+## 2026-10-27 - Input Length Limits to Prevent Denial of Service
+**Vulnerability:** A Denial of Service (DoS) vulnerability existed in the `/api/search` endpoint because `validate_number_list` lacked an input size limit. An attacker could provide a very large, pre-sorted array which, when passed to `build_bst`, triggered worst-case O(N^2) time complexity, leading to severe server resource consumption.
+**Learning:** Naive data structures like unbalanced Binary Search Trees can degrade to O(N^2) complexity with certain inputs (like pre-sorted arrays). Without input length limits, computational endpoints are easily susceptible to resource exhaustion attacks.
+**Prevention:** Always enforce a `max_length` parameter on functions that parse user input lists, especially when those lists are passed to algorithms with non-linear worst-case time complexity.
