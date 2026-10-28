@@ -1,0 +1,4 @@
+## 2024-05-24 - DoS Risk in BST Construction
+**Vulnerability:** Denial of Service (DoS) vulnerability due to unbounded input length. Building a Binary Search Tree (BST) from a pre-sorted array results in an O(N^2) operation.
+**Learning:** The application allowed processing extremely large arrays. In the `/api/search` endpoint, an array is inherently sorted prior to passing it to the `build_bst` function (`arr.sort()`). Building a BST by inserting sorted elements consecutively results in a skewed tree, turning a typically O(N log N) insertion process into an O(N^2) process, consuming excessive CPU time.
+**Prevention:** Implement a strict input length limit in input validation functions (e.g., `validate_number_list` now limits inputs to 15,000 elements) to prevent the application from attempting to process inputs large enough to cause significant service degradation.
