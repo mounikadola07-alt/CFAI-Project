@@ -1,0 +1,4 @@
+## 2025-02-14 - Fix DoS vulnerability in BST building
+**Vulnerability:** The application was vulnerable to Denial of Service (DoS) attacks because the `/api/search` endpoint accepts user-provided arrays without size limits and attempts to build a Binary Search Tree (BST) from them. Building a BST from a pre-sorted array results in O(N^2) time complexity.
+**Learning:** This vulnerability existed because the `validate_number_list` function did not enforce a maximum length on the parsed list, allowing attackers to submit extremely large arrays and consume excessive server CPU resources.
+**Prevention:** To avoid this in the future, always enforce reasonable limits on the size of user inputs, especially when those inputs are processed by algorithms with O(N^2) or worse worst-case time complexity.
