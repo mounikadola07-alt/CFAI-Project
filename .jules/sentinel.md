@@ -1,0 +1,4 @@
+## 2024-10-31 - [O(N^2) DoS Vulnerability in BST Building]
+**Vulnerability:** The application was vulnerable to Denial of Service (DoS) during the BST building process when large, sorted arrays were passed to the `/api/search` endpoint. Building a BST from a pre-sorted array causes the tree to become a linked list, degrading insertion time complexity to O(N) per node, leading to an overall O(N^2) complexity and significant computational delays.
+**Learning:** This vulnerability existed because there were no input length constraints on user-provided arrays before computationally expensive operations like `build_bst`. The application assumed reasonable input sizes, which attackers could violate to cause resource exhaustion.
+**Prevention:** Implement strict length limits on user input data before attempting computationally expensive operations. The length should be constrained at the input validation layer (e.g. `validate_number_list`).
