@@ -1,0 +1,4 @@
+## 2026-11-02 - Limit Input List Length to Prevent DoS
+**Vulnerability:** A Denial of Service (DoS) risk where large arrays sent to the `/api/search` endpoint could cause excessive processing time due to the O(N^2) complexity of building a Binary Search Tree (BST) from a sorted array.
+**Learning:** The `validate_number_list` function did not limit the length of the input. Building a BST takes O(N^2) for sorted arrays. When these algorithms perform at quadratic time complexity, a relatively small payload string can hang the server for an extended period if there is no boundary limit set on it.
+**Prevention:** Implement an input length limit `max_length` inside the parsing/validation layer, such as `validate_number_list`, to reject unreasonably large payloads before processing them.
