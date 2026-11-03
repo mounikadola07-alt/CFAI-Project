@@ -1,0 +1,4 @@
+## 2026-11-03 - Denial of Service via Large Input on O(N^2) BST Construction
+**Vulnerability:** A Denial of Service (DoS) vulnerability existed because users could provide arbitrarily large inputs that triggered the O(N^2) worst-case time complexity of building a Binary Search Tree (BST) from pre-sorted arrays without any size limits.
+**Learning:** We allowed users to submit arrays of any size to an endpoint (`/api/search`) which blindly instantiated a BST. Since building a BST from sorted input takes O(N^2) time with a basic insertion algorithm, very large lists could block the main thread and consume significant CPU/memory resources.
+**Prevention:** Always enforce maximum length limits on user-provided collections (arrays, strings) when processed by algorithmic endpoints, especially if the operations have poor worst-case time complexities like O(N^2) or worse.
