@@ -1,0 +1,4 @@
+## 2026-11-04 - Fix DoS via O(N^2) BST Construction
+**Vulnerability:** A Denial of Service (DoS) vulnerability existed because `validate_number_list` lacked an upper bound on input length. Submitting a large, already-sorted array to the `/api/search` endpoint resulted in $O(N^2)$ execution time for the `build_bst` function (unbalanced BST creation), allowing easy resource exhaustion and high response latency (e.g., ~8 seconds for 20k items).
+**Learning:** O(N^2) or higher complexity operations on user-supplied inputs without length limits are prime vectors for application-layer DoS attacks.
+**Prevention:** Always enforce a maximum input length (e.g., `max_length=15000`) for data structures prior to expensive processing, particularly when inputs can trigger worst-case algorithm performance.
