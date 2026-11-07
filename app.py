@@ -58,7 +58,8 @@ def compare_search():
     except ValueError as ve:
         return jsonify({'status': 'error', 'message': f"Validation Error: {str(ve)}"}), 400
     except Exception as e:
-        return jsonify({'status': 'error', 'message': f"Internal Error: {str(e)}"}), 500
+        # DO NOT leak exception details to user
+        return jsonify({'status': 'error', 'message': "Internal Error: An unexpected error occurred."}), 500
 
 @app.route('/api/subset', methods=['POST'])
 def compare_subset():
@@ -86,9 +87,12 @@ def compare_subset():
                 }
             }
         })
+    except ValueError as ve:
+        return jsonify({'status': 'error', 'message': f"Validation Error: {str(ve)}"}), 400
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 400
+        # DO NOT leak exception details to user
+        return jsonify({'status': 'error', 'message': "Internal Error: An unexpected error occurred."}), 500
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
