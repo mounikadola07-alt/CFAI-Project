@@ -1,0 +1,4 @@
+## 2024-11-07 - Flask Debug Mode and Error Information Leakage
+**Vulnerability:** The Flask application was running with `debug=True` in production code. In addition, `except Exception as e:` blocks were leaking sensitive internal exception stack trace details directly to the user (e.g. `str(e)`).
+**Learning:** Running Flask with `debug=True` exposes an interactive debugger allowing arbitrary remote code execution (RCE) in a non-production-safe manner. Likewise, exposing exception details helps malicious actors gather intel about application internals. This existed because default/testing configurations were not properly secured for production.
+**Prevention:** Always run Flask applications with `debug=False` in production or rely on proper WSGI servers. Ensure generic `Exception` catchers return obfuscated, generic messages to the end-user (e.g., "An unexpected error occurred") while logging detailed errors securely internally.
