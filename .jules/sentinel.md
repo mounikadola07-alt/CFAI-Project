@@ -1,0 +1,4 @@
+## 2024-05-18 - Fix Werkzeug debug RCE and algorithmic DoS
+**Vulnerability:** Werkzeug debugger was left enabled (debug=True), allowing potential Remote Code Execution (RCE) via interactive traceback console. Additionally, a Denial of Service (DoS) vulnerability existed due to large user input triggering O(N^2) complexity building a BST, and generic exceptions were leaking stack traces/internals to users.
+**Learning:** Development settings were deployed without being reverted to production configurations. User inputs lacked strict limits allowing disproportionate resource consumption, and error handlers were using str(e) on generic exceptions which can leak internals.
+**Prevention:** Always ensure `debug=False` for Flask applications in production. Validate maximum lengths/sizes for algorithmic inputs, and ensure global/generic exception handlers return safe, generic error messages without exposing raw exception strings.
