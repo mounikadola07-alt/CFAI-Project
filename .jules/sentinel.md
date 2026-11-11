@@ -1,0 +1,4 @@
+## 2024-05-15 - [Werkzeug Debugger RCE & Information Disclosure]
+ **Vulnerability:** Found `app.run(debug=True)` in `app.py` along with exception blocks exposing `str(e)` in `/api/search` and `/api/subset` endpoints.
+ **Learning:** `debug=True` enables the interactive Werkzeug debugger, which allows arbitrary remote code execution (RCE) if exposed. Furthermore, leaking exception details in API responses discloses internal server information that can aid attackers.
+ **Prevention:** Ensure Flask apps are run with `debug=False` (or without the parameter) in production or non-local environments. Always explicitly handle expected exceptions (like `ValueError` for input validation) and provide generic error messages (e.g., "An internal server error occurred") for unexpected exceptions in catch-all blocks.
